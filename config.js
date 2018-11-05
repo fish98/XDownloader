@@ -1,6 +1,6 @@
 const config = {
   dir: 'Test',                             // dir want to save in 
-  url: `https://exhentai.org/g/1220093/9f6fcb97cf`, // url need to change 
+  url: ``,                                // url need to change 
   opt: false,                             // if check option pages
   origin: true,                           // origin mode is used for download original sized images when aviliable
   page: {                                 // when opt mode is switched open you can download the specific pages range 

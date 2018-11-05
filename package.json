@@ -1,0 +1,21 @@
+{
+  "name": "ex-fish",
+  "version": "1.0.0",
+  "description": "Download Tool For Ex",
+  "scripts": {
+    "fish": "node config.js",
+    "start": "node bin/app.js"
+  },
+  "bin": {
+    "ex-fish": "bin/app.js"
+  },
+  "author": "h_fish",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "node-fetch": "^2.1.1",
+    "request": "^2.85.0",
+    "request-promise-native": "^1.0.5",
+    "url": "^0.11.0"
+  }
+}

@@ -1,5 +1,7 @@
 # XDownloader v1.2
 
+<img align="right" width="180px" src="https://bpic.588ku.com/element_pic/18/04/25/cac66a388546e2f8c44eb805600c85d4.jpg">
+
 ## Update on Nov. 5th
 
 Due to the demand of origin sized image when embeddig, add new feature for origin sized download option in config file

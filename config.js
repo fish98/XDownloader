@@ -29,5 +29,5 @@ else{
 console.log(`***************************************************************`)
 
 module.exports = {
-config
+  config
 } 

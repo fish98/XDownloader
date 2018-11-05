@@ -19,8 +19,10 @@ const option = {
 };
 async function getPage() {
     const e = await fetch(url, option),
-        o = await e.text();
-    return cheerio.load(o)(".ptb > tbody > tr").find("td").length - 2
+    o = await e.text();
+    let a = cheerio.load(o)(".ptb > tbody > tr").find("td").length - 2
+    let b = cheerio.load(o)("#gn").text()
+    return {a: a, b: b}
 }
 async function makeDir() {
     fs.mkdir(`./${dirName}`, () => {
@@ -82,9 +84,10 @@ async function downloadImage(e, o) {
 }
 async function ttfish() {
     let e, o, t;
-    console.log(`Start Download Process in Dir ${dirName}\n`);
+    console.log(`\nStart Download Process in Dir ${dirName}\n`);
     const a = await getPage();
-    for (console.log(`Contain ${a} Pages\n`), await makeDir(), optional ? (e = configPage.start, o = configPage.end) : (e = 1, o = a), t = e; t <= o; t++) await DownloadPage(t);
+    console.log(`${a.b}\n`)
+    for (console.log(`Contain ${a.a} Pages\n`), console.log("***************************************************************\n"), await makeDir(), optional ? (e = configPage.start, o = configPage.end) : (e = 1, o = a.a), t = e; t <= o; t++) await DownloadPage(t);
     console.log("Download thread complete!")
 }
 try {

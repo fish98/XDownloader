@@ -10,12 +10,10 @@
     "ex-fish": "bin/app.js"
   },
   "author": "h_fish",
-  "license": "MIT",
+  "license": "WTFPL",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "node-fetch": "^2.1.1",
-    "request": "^2.85.0",
-    "request-promise-native": "^1.0.5",
-    "url": "^0.11.0"
+    "node-fetch": "^2.2.1",
+    "request": "^2.88.0"
   }
 }

@@ -1,6 +1,6 @@
 # XDownloader v1.2
 
-<img align="right" width="180px" src="https://bpic.588ku.com/element_pic/18/04/25/cac66a388546e2f8c44eb805600c85d4.jpg">
+<img align="right" width="180px" src="https://raw.githubusercontent.com/fish98/QSC_Journey/master/Image/fish1.jpg">
 
 ## Update on Nov. 5th
 

@@ -51,7 +51,7 @@ async function getImage(e, o, t) {
         let e = o[a];
         n.push(fetch(e, option).then(e => e.text()).then(e => {
             let o = cheerio.load(e)
-            if(origin){
+            if(origin && o("#i7 > a").attr('href')){
                 t.push(o("#i7 > a").attr('href'))
             } else {
                 t.push(o("#img").attr("src"))
@@ -67,9 +67,9 @@ async function downloadImage(e, o) {
         let n = new Promise((t, n) => {
             const i = o[a - 1];
             if(origin){
-                const l = fs.createWriteStream(`${dirName}/${e}_${a}.jpg`);
+                const l = fs.createWriteStream(`${dirName}/${e}_${a}`);
                 option.url = i, request.get(option).pipe(l), l.on("finish", () => {
-                console.log(`Write Page ${e}_${a}.jpg OK`), t()
+                console.log(`Write Page ${e}_${a} OK`), t()
                 })
             } else {
                 let r = i.substr(-4);

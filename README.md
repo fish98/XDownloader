@@ -1,6 +1,6 @@
 # XDownloader v1.2
 
-<img align="right" width="180px" src="https://raw.githubusercontent.com/fish98/QSC_Journey/master/Image/fish1.jpg">
+<img align="right" width="180px" src="https://d29fhpw069ctt2.cloudfront.net/icon/image/49283/preview.svg">
 
 ## Update new Feature on Nov.8th
 

@@ -5,10 +5,10 @@ const fetch = require("node-fetch"),
     fs = require("fs"),
     cheerio = require("cheerio"),
     request = require("request"),
-    ProgressBar = require("process"),
+    ProgressBar = require("progress"),
     conf = require("../config").config;
 
-let url = conf.url,
+let bookList = conf.bookList,
     dirName = conf.dir,
     optional = conf.opt,
     configPage = conf.page,
@@ -21,11 +21,12 @@ const option = {
     }
 }
 
-async function getPage(site) {
-    const res = await fetch(site, option),
-        data = await res.text();
-    let page = cheerio.load(data)(".ptb > tbody > tr").find("td").length - 2
-    let title = cheerio.load(data)("#gn").text()
+async function getPage(book) {
+    const res = await fetch(book, option)
+    const data = await res.text()
+    let $ = cheerio.load(data)
+    let page = $(".ptb > tbody > tr").find("td").length - 2
+    let title = $("#gn").text()
     if (dirName === 'Default') {
         dirName = title
     }
@@ -42,82 +43,122 @@ async function makeDir() {
     })
 }
 
-async function DownloadPage(site, e) {
-    let o = [],
-        t = [];
-    await getimageGallery(site, e, o)
-    await getImage(e, o, t)
-    await downloadImage(site, e, t)
+async function DownloadPage(book, page) {
+    let pageGallery = [],
+        imageGallery = [];
+    await getimageGallery(book, page, pageGallery)
+    await getImage(page, pageGallery, imageGallery)
+    await downloadImage(page, imageGallery)
 }
 
-async function getimageGallery(site, e, o) {
-    let t = site + `?p=${e-1}`
-    await fetch(t, option).then(e => e.text()).then(e => {
-        const t = cheerio.load(e)
-        "normal" === viewMode ? t("#gdt > div > div > a").map((e, a) => {
-            o.push(t(a).attr("href"))
-        }) : t("#gdt > div > a").map((e, a) => {
-            o.push(t(a).attr("href"))
+async function getimageGallery(book, page, pageGallery) {
+    let url = book + `?p=${page-1}`
+    await fetch(url, option).then(res => res.text()).then(data => {
+        const $ = cheerio.load(data)
+        "normal" === viewMode ? $("#gdt > div > div > a").map((index, item) => {
+            pageGallery.push($(item).attr("href"))
+        }) : $("#gdt > div > a").map((index, item) => {
+            pageGallery.push($(item).attr("href"))
         })
-    }), console.log(`\nLoad Page ${e} OK\n`)
+    }), console.log(`\nLoad Page ${page} OK\nStart Processing Images\n`)
 }
 
-async function getImage(e, o, t) {
-    let a, n = [];
-    for (a = 0; a < o.length; a++) {
-        let e = o[a];
-        n.push(fetch(e, option).then(e => e.text()).then(e => {
-            let o = cheerio.load(e)
-            if (origin && o("#i7 > a").attr('href')) {
-                t.push(o("#i7 > a").attr('href'))
+async function getImage(page, pageGallery, imageGallery) {
+    let image, waitList = [];
+    
+    // Advanced Operation here. Set thread for async multiple image processing
+   
+    let thread = 1;
+   
+    // Require High Speed Network Connection!!!
+
+    let bar = new ProgressBar('processing image path [:bar] :percent :file :etas', {
+        complete: '=',
+        incomplete: ' ',
+        width: 25,
+        total: pageGallery.length 
+    })
+
+    for (image = 0; image < pageGallery.length; image++) {
+        let url = pageGallery[image];
+        waitList.push(fetch(url, option).then(res => res.text()).then(data => {
+            let $ = cheerio.load(data)
+            if (origin && $("#i7 > a").attr('href')) {
+                imageGallery.push($("#i7 > a").attr('href'))
             } else {
-                t.push(o("#img").attr("src"))
+                imageGallery.push($("#img").attr("src"))
             }
-        })), a % 1 == 0 && (await Promise.all(n), console.log("Load Image " + t.length), n = [])
+        }))
+        if (image % thread == 0) {
+            await Promise.all(waitList)
+            bar.tick({
+                file: `${imageGallery.length}.jpg`
+            })
+            waitList = []
+        }
     }
-    console.log(`\nLoad Image Path From Page ${e} OK\n`)
+    console.log(`\nLoad Image Path From Page ${page} OK\nStart Downloading now\n`)
 }
 
-async function downloadImage(site, e, o) {
-    let t = [];
-    for (let a = 1; a <= o.length; a++) {
-        let n = new Promise((t, n) => {
-            const i = o[a - 1]
+async function downloadImage(page, imageGallery) {
+
+    // Advanced Operation here. Set thread for async multiple image processing
+    
+    let thread = 1;
+    
+    // Require High Speed Network Connection!!!
+
+    let bar = new ProgressBar('Downloading images [:bar] :percent :etas', {
+        complete: '=',
+        incomplete: ' ',
+        width: 25,
+        total: imageGallery.length
+    })
+
+    let waitList = [];
+    for (let image = 1; image <= imageGallery.length; image++) {
+        let download = new Promise((resolve, reject) => {
+            const imageUrl = imageGallery[image - 1]
             if (origin) {
-                const l = fs.createWriteStream(`${dirName}/${e}_${a}`)
-                option.url = i, request.get(option).pipe(l), l.on("finish", () => {
-                    console.log(`Write Page ${e}_${a} OK`), t()
-                })
+                const file = fs.createWriteStream(`${dirName}/${page-1}${image}.jpg`)
+                option.url = imageUrl 
+                request.get(option).pipe(file)
+                // file.on("finish", () => {})
             } else {
-                let r = i.substr(-4)
-                const l = fs.createWriteStream(`${dirName}/${e}_${a}${r}`)
-                option.url = i, request.get(option).pipe(l), l.on("finish", () => {
-                    console.log(`Write Page ${e}_${a}${r} OK`), t()
-                })
+                let suffix = imageUrl.substr(-4)
+                const file = fs.createWriteStream(`${dirName}/${page-1}${image}${suffix}`)
+                option.url = imageUrl
+                request.get(option).pipe(file)
+                // file.on("finish", () => {})
             }
         })
-        t.push(n), a % 1 == 0 && (await Promise.all(t), t = [])
+        waitList.push(download)
+        if(image % thread == 0) {
+            await Promise.all(waitList)
+            bar.tick(1)
+        }
+        waitList = []
     }
 }
 
-async function ttfish(site) {
-    let e, o, t;
+async function ttfish(book) {
+    let start, end, page;
     console.log(`\nStart Download Process in Dir ${dirName}\n`)
-    const pageInfo = await getPage(site)
+    const pageInfo = await getPage(book)
     console.log(`${pageInfo.title}\n`)
     console.log(`Contain ${pageInfo.page} Pages\n`)
     console.log("***************************************************************\n")
     await makeDir()
-    optional ? (e = configPage.start, o = configPage.end) : (e = 1, o = pageInfo.page)
-    for (t = e; t <= o; t++) {
-        await DownloadPage(site, t)
+    optional ? (start = configPage.start, end = configPage.end) : (start = 1, end = pageInfo.page)
+    for (page = start; page <= end; page++) {
+        await DownloadPage(book, page)
     }
-    console.log("Download thread complete!")
+    console.log("Download thread Complete!")
 }
 
 async function main() {
-    for (let i = 0; i < url.length; i++) {
-        await ttfish(url[i])
+    for (let book = 0; book < bookList.length; book++) {
+        await ttfish(bookList[book])
     }
 }
 

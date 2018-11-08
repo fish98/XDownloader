@@ -1,6 +1,6 @@
 const config = {
-  dir: 'Default', // dir want to specialize 
-  url: [], // url need to change && Array is aviliable! 
+  dir: 'Test', // dir want to specialize 
+  bookList: [], // Array contain books url  
 
   // for example ["xxx.com/xxx", "xxx.com/xxx"] or ["xxx.com/xxx"]
 
@@ -31,7 +31,7 @@ if (config.opt) {
 }
 console.log(`***************************************************************`)
 
-if (config.url.length === 0) {
+if (config.bookList.length === 0) {
   console.log(`\n\n\n PLEASE ENSURE THE TARGET URL IS FILLED!!!\n\n\n`)
 }
 

@@ -1,8 +1,8 @@
 const config = {
-  dir: 'Test',                            // dir want to save in 
-  url: ``,                                // url need to change 
+  dir: '',                            // dir want to specialize 
+  url: [],                                // url need to change 
   opt: false,                             // if check option pages
-  origin: true,                           // origin mode is used for download original sized images when aviliable
+  origin: false,                           // origin mode is used for download original sized images when aviliable
   page: {                                 // when opt mode is switched open you can download the specific pages range 
     start: 1,
     end: 10
@@ -13,7 +13,7 @@ const config = {
 // Please do not mind the logs below
 console.log(`***************************************************************`)
 console.log(`The Download Dir : ${config.dir}`)
-console.log(`The Download Url : ${config.url}`)
+// console.log(`The Download Url : ${config.url}`)
 console.log(`Your ViewMode Status : ${config.viewMode}\n`)
 console.log(`The Origin Size Mode Status : ${config.origin}`)
 

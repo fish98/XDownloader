@@ -17,26 +17,30 @@ const option = {
         Cookie: "ipb_member_id=4259928; ipb_pass_hash=fa7b84cfe16195e8795f21f8b55a9753; yay=louder; igneous=1959a2232; sl=dm_1; lv=1541349054-1541349079; s=a46a45a9e; sk=3qojffy6x7pvkt1sskpqsgdz79wy"
     }
 };
-async function getPage() {
-    const e = await fetch(url, option),
+async function getPage(site) {
+    const e = await fetch(site, option),
     o = await e.text();
     let a = cheerio.load(o)(".ptb > tbody > tr").find("td").length - 2
     let b = cheerio.load(o)("#gn").text()
+    if(dirName === ''){
+        dirName = b
+    }
     return {a: a, b: b}
 }
 async function makeDir() {
     fs.mkdir(`./${dirName}`, () => {
         console.log(`Initialize Dir ${dirName} OK`)
+        console.log(`Please check if this folder has already been written!`)
     })
 }
-async function DownloadPage(e) {
+async function DownloadPage(site, e) {
     let o = [],
         t = [];
-    await getimageGallery(e, o), await getImage(e, o, t), await downloadImage(e, t)
+    await getimageGallery(site, e, o), await getImage(e, o, t), await downloadImage(site, e, t)
 }
-async function getimageGallery(e, o) {
-    let t = url;
-    t = url + `?p=${e-1}`, await fetch(t, option).then(e => e.text()).then(e => {
+async function getimageGallery(site, e, o) {
+    let t = site + `?p=${e-1}`
+    await fetch(t, option).then(e => e.text()).then(e => {
         const t = cheerio.load(e);
         "normal" === viewMode ? t("#gdt > div > div > a").map((e, a) => {
             o.push(t(a).attr("href"))
@@ -61,7 +65,7 @@ async function getImage(e, o, t) {
     console.log(`\nLoad Image Path From Page ${e} OK\n`)
 }
 
-async function downloadImage(e, o) {
+async function downloadImage(site, e, o) {
     let t = [];
     for (let a = 1; a <= o.length; a++) {
         let n = new Promise((t, n) => {
@@ -82,19 +86,24 @@ async function downloadImage(e, o) {
         t.push(n), a % 1 == 0 && (await Promise.all(t), t = [])
     }
 }
-async function ttfish() {
-    let e, o, t;
-    console.log(`\nStart Download Process in Dir ${dirName}\n`);
-    const a = await getPage();
-    console.log(`${a.b}\n`)
-    for (console.log(`Contain ${a.a} Pages\n`), console.log("***************************************************************\n"), await makeDir(), optional ? (e = configPage.start, o = configPage.end) : (e = 1, o = a.a), t = e; t <= o; t++) await DownloadPage(t);
-    console.log("Download thread complete!")
+async function ttfish(site) {
+        let e, o, t;
+        console.log(`\nStart Download Process in Dir ${dirName}\n`);
+        const a = await getPage(site);
+        console.log(`${a.b}\n`)
+        for (console.log(`Contain ${a.a} Pages\n`), console.log("***************************************************************\n"), await makeDir(), optional ? (e = configPage.start, o = configPage.end) : (e = 1, o = a.a), t = e; t <= o; t++) await DownloadPage(site, t);
+        console.log("Download thread complete!")
+}
+
+async function main(){
+    for(let i = 0; i < url.length; i++){
+        await ttfish(url[i])
+    }
 }
 try {
-    ttfish()
+    main()
 } catch(error) {
     console.log(error)
-
     console.log("The pipe stream download process requires great network status\n")
     console.log("Check your network status and try again\n")
 }

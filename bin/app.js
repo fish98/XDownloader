@@ -22,14 +22,14 @@ async function getPage(site) {
     o = await e.text();
     let a = cheerio.load(o)(".ptb > tbody > tr").find("td").length - 2
     let b = cheerio.load(o)("#gn").text()
-    if(dirName === ''){
+    if(dirName === 'Default'){
         dirName = b
     }
     return {a: a, b: b}
 }
 async function makeDir() {
     fs.mkdir(`./${dirName}`, () => {
-        console.log(`Initialize Dir ${dirName} OK`)
+        console.log(`Initialize Target Directory OK`)
         console.log(`Please check if this folder has already been written!`)
     })
 }
@@ -47,7 +47,7 @@ async function getimageGallery(site, e, o) {
         }) : t("#gdt > div > a").map((e, a) => {
             o.push(t(a).attr("href"))
         })
-    }), console.log(`\nLog Page ${e} OK\n`)
+    }), console.log(`\nLoad Page ${e} OK\n`)
 }
 async function getImage(e, o, t) {
     let a, n = [];
@@ -60,7 +60,7 @@ async function getImage(e, o, t) {
             } else {
                 t.push(o("#img").attr("src"))
             }
-        })), a % 1 == 0 && (await Promise.all(n), console.log("Log Image " + t.length), n = [])
+        })), a % 1 == 0 && (await Promise.all(n), console.log("Load Image " + t.length), n = [])
     }
     console.log(`\nLoad Image Path From Page ${e} OK\n`)
 }

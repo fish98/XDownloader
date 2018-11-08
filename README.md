@@ -2,7 +2,7 @@
 
 <img align="right" width="180px" src="https://raw.githubusercontent.com/fish98/QSC_Journey/master/Image/fish1.jpg">
 
-## Update on Nov. 5th
+## Update on Nov.5th
 
 Due to the demand of origin sized image when embeddig, add new feature for origin sized download option in config file
 

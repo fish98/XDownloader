@@ -2,6 +2,12 @@
 
 <img align="right" width="180px" src="https://raw.githubusercontent.com/fish98/QSC_Journey/master/Image/fish1.jpg">
 
+## Update new Feature on Nov.8th
+
++ Make Multi File Download Avaliable => Modify type of `config.url` from Number to Array.
++ Require Progress Package to add process bar when downloading instead of logs.
++ Fix file detect bugs.
+
 ## Update on Nov.5th
 
 Due to the demand of origin sized image when embeddig, add new feature for origin sized download option in config file

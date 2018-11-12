@@ -108,36 +108,40 @@ async function downloadImage(page, imageGallery) {
     
     // Require High Speed Network Connection!!!
 
-    let bar = new ProgressBar('Downloading images [:bar] :percent :etas', {
+       let bar = new ProgressBar('processing image path [:bar] :percent :etas', {
         complete: '=',
         incomplete: ' ',
         width: 25,
-        total: imageGallery.length
+        total: imageGallery.length + 1 
     })
 
+    bar.tick(1)
+    
     let waitList = [];
+
     for (let image = 1; image <= imageGallery.length; image++) {
         let download = new Promise((resolve, reject) => {
-            const imageUrl = imageGallery[image - 1]
+            let imageUrl = imageGallery[image - 1]
             if (origin) {
-                const file = fs.createWriteStream(`${dirName}/${page-1}${image}.jpg`)
+                let file = fs.createWriteStream(`${dirName}/${page-1}${image}.jpg`)
                 option.url = imageUrl 
                 request.get(option).pipe(file)
-                // file.on("finish", () => {})
-            } else {
+                file.on("finish", () => {console.log(1), resolve()})
+            } 
+            else {
                 let suffix = imageUrl.substr(-4)
                 const file = fs.createWriteStream(`${dirName}/${page-1}${image}${suffix}`)
                 option.url = imageUrl
                 request.get(option).pipe(file)
-                // file.on("finish", () => {})
+                file.on("finish", () => {console.log(2), resolve()})
             }
         })
         waitList.push(download)
         if(image % thread == 0) {
             await Promise.all(waitList)
             bar.tick(1)
-        }
-        waitList = []
+            waitList = []
+        }     
     }
 }
 

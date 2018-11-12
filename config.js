@@ -1,11 +1,12 @@
 const config = {
   dir: 'Test', // dir want to specialize 
+  
   bookList: [], // Array contain books url  
 
   // for example ["xxx.com/xxx", "xxx.com/xxx"] or ["xxx.com/xxx"]
 
   opt: false, // if check option pages
-  origin: false, // origin mode is used for download original sized images when aviliable
+  origin: true, // origin mode is used for download original sized images when aviliable
   page: { // when opt mode is switched open you can download the specific pages range 
     start: 1,
     end: 10

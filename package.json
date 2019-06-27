@@ -4,7 +4,8 @@
   "description": "Download Tool For Ex",
   "scripts": {
     "fish": "node config.js",
-    "start": "node bin/app.js"
+    "start": "node bin/app.js",
+    "test": "node bin/test.js"
   },
   "bin": {
     "ex-fish": "bin/app.js"

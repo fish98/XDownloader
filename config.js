@@ -1,7 +1,7 @@
 const config = {
   dir: 'Test', // dir want to specialize 
   
-  bookList: [], // Array contain books url  
+  bookList: [""], // Array contain books url  
 
   // for example ["xxx.com/xxx", "xxx.com/xxx"] or ["xxx.com/xxx"]
 

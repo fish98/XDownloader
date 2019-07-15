@@ -4,7 +4,7 @@
 
 ## Update new Feature on Nov.8th
 
-+ Make Multi File Download Avaliable => Modify type of `config.url` from Number to Array.
++ Make Multi Files Downloading Avaliable => Modify type of `config.url` from Number to Array.
 + Require Progress Package to add process bar when downloading instead of logs.
 + Fix file detect bugs.
 

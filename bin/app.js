@@ -17,7 +17,7 @@ let bookList = conf.bookList,
 
 const option = {
     headers: {
-        Cookie: "ipb_member_id=4259928; ipb_pass_hash=fa7b84cfe16195e8795f21f8b55a9753; yay=louder; igneous=1959a2232; sl=dm_1; lv=1541349054-1541349079; s=a46a45a9e; sk=3qojffy6x7pvkt1sskpqsgdz79wy"
+        Cookie: ""
     }
 }
 
